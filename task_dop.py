@@ -50,7 +50,7 @@ class Lich:
 
     def info(self):
         print('Лич может кроме атаки призыватьсвоих преспешникав в виде зомби или скелетов в размере от 1 до 5')
-        print(f'У лича {self.health} здоровья, {self.max_damage} максимальный урон,{self.min_damage} минимальный урон')
+        print(f'У лича {self.health} здоровья, {self.max_damage * self.count_creatures} максимальный урон,{self.min_damage * self.count_creatures} минимальный урон')
     pass
 
 
@@ -101,7 +101,7 @@ class Skelet:
 
     def info(self):
         print('Скелет имеет две атаки мечом и луком после атаки луком ему не могут нанести ответный удар')
-        print(f'У скелета {self.health} здоровья, {self.max_damage} максимальный урон,{self.min_damage} минимальный урон')
+        print(f'У скелета {self.health * self.count_creatures} здоровья, {self.max_damage * self.count_creatures} максимальный урон,{self.min_damage * self.count_creatures} минимальный урон')
     pass
 
 
@@ -143,7 +143,7 @@ class Zombie:
 
     def info(self):
         print('Зомби имеет большое количество здоровья но маленький урон')
-        print(f'У зомби {self.health} здоровья, {self.max_damage} максимальный урон,{self.min_damage} минимальный урон')
+        print(f'У зомби {self.health * self.count_creatures} здоровья, {self.max_damage * self.count_creatures} максимальный урон,{self.min_damage * self.count_creatures} минимальный урон')
     pass
 
 
@@ -184,7 +184,7 @@ class Ghoast:
 
     def info(self):
         print('Призрак после атаки ему не могут нанести ответный удар, также может уклонится от удара с шансом 75%')
-        print(f'У призрака {self.health} здоровья, {self.max_damage} максимальный урон,{self.min_damage} минимальный урон')
+        print(f'У призрака {self.health * self.count_creatures} здоровья, {self.max_damage * self.count_creatures} максимальный урон,{self.min_damage * self.count_creatures} минимальный урон')
     pass
 
 
@@ -228,7 +228,7 @@ class Vampire:
 
     def info(self):
         print('Вампир после атаки востанавливает 15% здоровья от урона который он нанес')
-        print(f'У вампира {self.health} здоровья, {self.max_damage} максимальный урон,{self.min_damage} минимальный урон')
+        print(f'У вампира {self.health * self.count_creatures} здоровья, {self.max_damage * self.count_creatures} максимальный урон,{self.min_damage * self.count_creatures} минимальный урон')
     pass
 
 
@@ -266,7 +266,7 @@ class Villager:
 
     def info(self):
         print('Крестьянин имеет среднее количество здоровья и средний урон')
-        print(f'У крестьянина {self.health} здоровья, {self.max_damage} максимальный урон,{self.min_damage} минимальный урон')
+        print(f'У крестьянина {self.health * self.count_creatures} здоровья, {self.max_damage * self.count_creatures} максимальный урон,{self.min_damage * self.count_creatures} минимальный урон')
     pass
 
 
@@ -303,7 +303,7 @@ class Archer:
 
     def info(self):
         print('Лучник имеет малое количество здоровья но высокий урон, после атки не может получить ответный удар')
-        print(f'У лучника {self.health} здоровья, {self.max_damage} максимальный урон,{self.min_damage} минимальный урон')
+        print(f'У лучника {self.health * self.count_creatures} здоровья, {self.max_damage * self.count_creatures} максимальный урон,{self.min_damage * self.count_creatures} минимальный урон')
     pass
 
 
@@ -341,7 +341,7 @@ class Paladin:
 
     def info(self):
         print('Паладин имеет большое количество здоровья и высокий урон, паладин имеет защиту и получает на 30% меньше урона')
-        print(f'У паладина {self.health} здоровья, {self.max_damage} максимальный урон,{self.min_damage} минимальный урон')
+        print(f'У паладина {self.health * self.count_creatures} здоровья, {self.max_damage * self.count_creatures} максимальный урон,{self.min_damage * self.count_creatures} минимальный урон')
     pass
 
 
@@ -379,7 +379,7 @@ class Grifon:
 
     def info(self):
         print('Грифон имеет гиганское количество здоровья и высокий урон')
-        print(f'У грифона {self.health} здоровья, {self.max_damage} максимальный урон,{self.min_damage} минимальный урон')
+        print(f'У грифона {self.health * self.count_creatures} здоровья, {self.max_damage * self.count_creatures} максимальный урон,{self.min_damage * self.count_creatures} минимальный урон')
     pass
 
 
@@ -427,7 +427,7 @@ class Mage:
     
     def info(self):
         print('Маг имеет среднее количество здоровья и средний урон, маг может востановить 10% от его максимального здоровья')
-        print(f'У мага {self.health} здоровья, {self.max_damage} максимальный урон,{self.min_damage} минимальный урон')   
+        print(f'У мага {self.health * self.count_creatures} здоровья, {self.max_damage * self.count_creatures} максимальный урон,{self.min_damage * self.count_creatures} минимальный урон')   
     pass
 
 
