@@ -147,14 +147,17 @@ class Lich(Attack, Take_damage):
 
 
     def spawn_minion(self):
-        a = random.randint(1, 2)
-        spawn = random.randint(1, 5)
-        if a == 1:
-            zombie.spawn_new(spawn)
-            print(f'появилось {spawn} зомби')
+        if self.health > 0:
+            a = random.randint(1, 2)
+            spawn = random.randint(1, 5)
+            if a == 1:
+                zombie.spawn_new(spawn)
+                print(f'появилось {spawn} зомби')
+            else:
+                skelet.spawn_new(spawn)
+                print(f'появилось {spawn} скелетов')
         else:
-            skelet.spawn_new(spawn)
-            print(f'появилось {spawn} скелетов')
+            print(f"{self.name} не может использовать способность, так как он повержен.")
     
 
     def info(self):
@@ -460,12 +463,15 @@ class Mage(Attack, Take_damage):
 
 
     def heal(self):
-        if self.health < 100 * self.count_creatures:
-            self.health += self.max_health * 0.1
-            if self.health >= 100 * self.count_creatures:
-                    self.health = self.max_health
+        if self.health > 0:
+            if self.health < 100 * self.count_creatures:
+                self.health += self.max_health * 0.1
+                if self.health >= 100 * self.count_creatures:
+                        self.health = self.max_health
+            else:
+                self.health = self.max_health
         else:
-            self.health = self.max_health
+            print(f"{self.name} не может использовать способность, так как он повержен.")
 
     
     def info(self):
