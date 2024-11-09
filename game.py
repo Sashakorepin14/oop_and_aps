@@ -516,22 +516,6 @@ class Mage(Attack, Take_damage):
     pass
 
 
-def battle_info():
-    print('Армия противника')
-    print(f'{villager.count_creatures} крестьянинов')
-    print(f'{archer.count_creatures} лучников')
-    print(f'{paladin.count_creatures} паладинов')
-    print(f'{grifon.count_creatures} грифонов')
-    print(f'{mage.count_creatures} магов')
-    print('Ваша армия')
-    print(f'{lich.count_creatures} личей')
-    print(f'{skelet.count_creatures} скелетов')
-    print(f'{zombie.count_creatures} зомби')
-    print(f'{ghoast.count_creatures} призраков')
-    print(f'{vampire.count_creatures} вампиров')
-    pass   
-
-
 villager = Villager(0)
 archer = Archer(0)
 paladin = Paladin(0)
@@ -602,6 +586,15 @@ class Player_people:
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
+    
+
+    def army_info(self):
+        print('Армия людей')
+        print(f'{villager.count_creatures} крестьянинов')
+        print(f'{archer.count_creatures} лучников')
+        print(f'{paladin.count_creatures} паладинов')
+        print(f'{grifon.count_creatures} грифонов')
+        print(f'{mage.count_creatures} магов')
 
 
 class Player_necromancers:
@@ -662,14 +655,25 @@ class Player_necromancers:
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
+    
+
+    def army_info(self):
+        print('Армия некромантов')
+        print(f'{lich.count_creatures} личей')
+        print(f'{skelet.count_creatures} скелетов')
+        print(f'{zombie.count_creatures} зомби')
+        print(f'{ghoast.count_creatures} призраков')
+        print(f'{vampire.count_creatures} вампиров')
+        
 
 
 if __name__ == '__main__':
     p1 = Player_people(10000000000)
     p1.create_villager(10)
-    p2 = Player_necromancers(10000000000000)
+    p2 = Player_necromancers(10000000000)
     p2.create_lich(5)
-    battle_info()
+    p1.army_info()
+    p2.army_info()
     lich.ray_attack(villager)
     # lich.info()
     # lich.spawn_minion()
