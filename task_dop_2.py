@@ -94,6 +94,10 @@ class Take_damage:
                 self.count_creatures = 0
             else:
                 print(f"{self.name} получили {damage} урона. Осталось здоровья: {self.health}")
+                if self.health % self.max_hp != 0:
+                    self.count_creatures = self.health // self.max_hp + 1
+                else:
+                    self.count_creatures = self.health // self.max_hp
         else:
             print(f"{self.name} не получили {damage} урона. Осталось здоровья: {self.health}")
 
@@ -106,6 +110,10 @@ class Take_damage:
             self.count_creatures = 0
         else:
             print(f"{self.name} получил {damage} урона. Осталось здоровья: {self.health}")
+            if self.health % self.max_hp != 0:
+                self.count_creatures = self.health // self.max_hp + 1
+            else:
+                self.count_creatures = self.health // self.max_hp
 
 
 def game_info():
@@ -174,6 +182,7 @@ class Skelet(Attack, Take_damage):
         self.count_creatures = count_creatures
         self.name = 'Скелет'
         self.health = 50 * count_creatures
+        self.max_hp = 50
 
     def sword_attack(self, other):
         super().attack(other = other)
@@ -213,6 +222,7 @@ class Zombie(Attack, Take_damage):
         self.count_creatures = count_creatures
         self.name = 'Зомби'
         self.health = 200 * count_creatures
+        self.max_hp = 200
 
 
     def retaliatory_attack(self, other):
@@ -249,6 +259,7 @@ class Ghoast(Attack, Take_damage):
         self.count_creatures = count_creatures
         self.name = 'Призрак'
         self.health = 75 * count_creatures
+        self.max_hp = 75
 
 
     def retaliatory_attack(self, other):
@@ -281,6 +292,7 @@ class Vampire(Attack, Take_damage):
         self.count_creatures = count_creatures
         self.name = 'Вампир'
         self.health = 150 * count_creatures
+        self.max_hp = 150
     
 
     def bite_attack(self, other):
@@ -338,6 +350,7 @@ class Archer(Attack, Take_damage):
         self.count_creatures = count_creatures
         self.name = 'Лучник'
         self.health = 75 * count_creatures
+        self.max_hp = 75
 
 
     def sword_attack(self, other):
@@ -374,6 +387,7 @@ class Paladin(Attack, Take_damage):
         self.count_creatures = count_creatures
         self.name = 'Паладин'
         self.health = 300 * count_creatures
+        self.max_hp = 300
 
 
     def sword_attack(self, other):
@@ -406,6 +420,7 @@ class Grifon(Attack, Take_damage):
         self.count_creatures = count_creatures
         self.name = 'Грифон'
         self.health = 500 * count_creatures
+        self.max_hp = 500
 
 
     def attack(self, other):
@@ -439,6 +454,7 @@ class Mage(Attack, Take_damage):
         self.name = 'Маг'
         self.health = 100 * count_creatures
         self.max_health = 100 * count_creatures
+        self.max_hp = 100
 
 
     def mage_attack(self, other):
