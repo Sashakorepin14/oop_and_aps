@@ -117,7 +117,7 @@ class Take_damage:
             print(f"{self.name} не получили {damage} урона. Осталось здоровья: {self.health}")
 
 
-    def take_damage(self, damage):
+    def take_damage_with_defense(self, damage):
         self.health -= damage * 0.7
         if self.health <= 0:
             self.health = 0
