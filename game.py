@@ -424,7 +424,7 @@ class Paladin(Attack, Take_damage):
     
 
     def take_damage(self, damage):
-        super().paladin_take_damage(damage = damage)
+        super().take_damage_with_defence(damage = damage)
     
 
     def is_alive(self):
