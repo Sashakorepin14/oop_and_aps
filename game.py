@@ -190,6 +190,7 @@ class Lich(Attack, Take_damage):
 
     def __len__(self):
         super().len1()
+        return self.count_creatures
     
 
     def info(self):
@@ -237,6 +238,11 @@ class Skelet(Attack, Take_damage):
 
     def create(self, count):
         super().create(count = count)
+
+    
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
     
 
     def info(self):
@@ -278,6 +284,11 @@ class Zombie(Attack, Take_damage):
 
     def create(self, count):
         super().create(count = count)
+
+
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
     
 
     def info(self):
@@ -317,6 +328,11 @@ class Ghoast(Attack, Take_damage):
         super().create(count = count)
 
 
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
+
+
     def info(self):
         print('Призрак может атаковать с помощью функции atack, а также может уклонится от удара с шансом 75%')
         print(f'У призрака сейчас {self.health * self.count_creatures} здоровья, {self.max_damage * self.count_creatures} максимальный урон,{self.min_damage * self.count_creatures} минимальный урон')
@@ -354,6 +370,11 @@ class Vampire(Attack, Take_damage):
         super().create(count = count)
 
 
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
+
+
     def info(self):
         print('Вампир может атковать укусом (bite_attack) после атаки востанавливает 15% здоровья от урона который он нанес')
         print(f'У вампира сейчас {self.health * self.count_creatures} здоровья, {self.max_damage * self.count_creatures} максимальный урон,{self.min_damage * self.count_creatures} минимальный урон')
@@ -385,6 +406,11 @@ class Villager(Attack, Take_damage):
 
     def create(self, count):
         super().create(count = count)
+
+
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
     
 
     def info(self):
@@ -427,6 +453,11 @@ class Archer(Attack, Take_damage):
 
     def create(self, count):
         super().create(count = count)
+    
+
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
 
 
     def info(self):
@@ -466,6 +497,11 @@ class Paladin(Attack, Take_damage):
     def create(self, count):
         super().create(count = count)
 
+    
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
+
 
     def info(self):
         print('Паладин имеет большое количество здоровья и высокий урон, паладин имеет защиту и получает на 30% меньше урона, атакует с помощью функции sword_attack')
@@ -502,6 +538,11 @@ class Grifon(Attack, Take_damage):
 
     def create(self, count):
         super().create(count = count)
+
+    
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
     
 
     def info(self):
@@ -540,6 +581,11 @@ class Mage(Attack, Take_damage):
 
     def create(self, count):
         super().create(count = count)
+
+    
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
 
 
     def heal(self):
