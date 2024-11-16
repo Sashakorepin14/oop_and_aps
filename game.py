@@ -769,3 +769,4 @@ if __name__ == '__main__':
     # lich.spawn_minion()
     # battle_info()
     len(lich)
+    len(villager)
