@@ -82,6 +82,10 @@ class Attack:
             other.take_damage(self.attack_power)
         else:
             print(" ")
+    
+
+    def len1(self):
+        print(self.count_creatures)
 
 
 class Take_damage:
@@ -182,6 +186,10 @@ class Lich(Attack, Take_damage):
                 print(f'появилось {spawn} скелетов')
         else:
             print(f"{self.name} не может использовать способность, так как он повержен.")
+    
+
+    def __len__(self):
+        super().len1()
     
 
     def info(self):
@@ -714,3 +722,4 @@ if __name__ == '__main__':
     # lich.info()
     # lich.spawn_minion()
     # battle_info()
+    len(lich)
