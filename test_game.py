@@ -2,7 +2,7 @@ import random
 
 class Day_cycle:
     def __init__(self):
-        self.curent_day = 0
+        self.curent_day = 1
     
 
     def check_curent_day(self):
@@ -14,35 +14,38 @@ class Day_cycle:
 
 
 class Gold_mine(Day_cycle):
-    def __init__(self, gold):
+    def __init__(self):
         self.level = 0
-        self.gold = gold
+        self.curent_day = 1
         self.curent_gold_amount = 0
-    
+        self.production_in_day = 0
 
     def create_gold_mine(self):
         self.cost = 300
         if self.gold >= self.cost:
             self.gold -= self.cost
-            self.level_of_gold_mine = 1
+            self.level = 1
             self.production_in_day = 20
+            print(f'Вы создали золотоносную шахту ее характеристики: {self.level} уровень, доходность {self.production_in_day} золота')
         else:
             print('Недостаточно золота для покупки')
     
 
     def level_up_gold_mine(self):
-        if self.level_of_gold_mine == 1:
+        if self.level == 1:
             self.cost = 200
             if self.gold >= self.cost:
                 self.gold -= self.cost
-                self.level_of_gold_mine = 2
+                self.level = 2
                 self.production_in_day = 40
-        elif self.level_of_gold_mine == 2:
+                print(f'Вы улучшили золотоносную шахту до второго уровня теперь ее доходность состовляет {self.production_in_day}')
+        elif self.level == 2:
             self.cost = 400
             if self.gold >= self.cost:
                 self.gold -= self.cost
-                self.level_of_gold_mine = 3
+                self.level = 3
                 self.production_in_day = 60
+                print(f'Вы улучшили золотоносную шахту до третьего уровня теперь ее доходность состовляет {self.production_in_day}')
 
     
     def collect_products_with_gold_mine(self):
@@ -58,12 +61,27 @@ class Gold_mine(Day_cycle):
         self.curent_gold_amount += self.production_in_day * self.curent_day
 
 
+gold_mine_for_p1 = Gold_mine()
+gold_mine_for_p2 = Gold_mine()
+
+
+class Town(Gold_mine):
+    def __init__(self):
+        pass
+    def day_cycle(self):
+        super().day_cycle()
+
+
 class Attack:
     def attack(self, other):
         if self.health > 0:
-            self.attack_power = random.randint(self.min_damage, self.max_damage) * self.count_creatures
-            print(f"{self.name} атакует {other.name} и наносит {self.attack_power} урона!")
-            other.take_damage(self.attack_power)
+            if self.curent_motion < self.curent_day:
+                self.attack_power = random.randint(self.min_damage, self.max_damage) * self.count_creatures
+                print(f"{self.name} атакует {other.name} и наносит {self.attack_power} урона!")
+                other.take_damage(self.attack_power)
+                self.curent_motion += 1
+            else:
+                print('Юнит устал и больше не может ходить')
         else:
             print(f"{self.name} не может атаковать, так как он повержен.")
     
@@ -71,9 +89,13 @@ class Attack:
     def bow_attack(self, other):
         if self.health > 0:
             if self.arrows > 0:
-                self.attack_power = random.randint(self.min_damage, self.max_damage) * self.count_creatures
-                print(f"{self.name} стреляет в {other.name} и наносит {self.attack_power} урона!")
-                other.take_damage(self.attack_power)
+                if self.curent_motion < self.curent_day:
+                    self.attack_power = random.randint(self.min_damage, self.max_damage) * self.count_creatures
+                    print(f"{self.name} стреляет в {other.name} и наносит {self.attack_power} урона!")
+                    other.take_damage(self.attack_power)
+                    self.curent_motion += 1
+                else:
+                    print('Юнит устал и больше не может ходить')
             else:
                 print('Стрелы закончились')
         else:
@@ -82,15 +104,19 @@ class Attack:
 
     def bite_attack(self, other):
         if self.health > 0:
-            self.attack_power = random.randint(self.min_damage, self.max_damage) * self.count_creatures
-            other.take_damage(self.attack_power)
-            print(f"{self.name} кусает {other.name} и наносит {self.attack_power} урона!")
-            if self.health < 150 * self.count_creatures:
-                self.health += self.attack_power * 0.15
-                if self.health >= 150 * self.count_creatures:
+            if self.curent_motion < self.curent_day:
+                self.attack_power = random.randint(self.min_damage, self.max_damage) * self.count_creatures
+                other.take_damage(self.attack_power)
+                print(f"{self.name} кусает {other.name} и наносит {self.attack_power} урона!")
+                self.curent_motion += 1
+                if self.health < 150 * self.count_creatures:
+                    self.health += self.attack_power * 0.15
+                    if self.health >= 150 * self.count_creatures:
+                        self.health = 150 * self.count_creatures
+                else:
                     self.health = 150 * self.count_creatures
             else:
-                self.health = 150 * self.count_creatures
+                print('Юнит устал и больше не может ходить')
         else:
             print(f"{self.name} не может атаковать, так как он повержен.")
 
@@ -98,10 +124,14 @@ class Attack:
     def ray_attack(self, other):
         if self.health > 0:
             if self.mana > 25:
-                self.attack_power = random.randint(self.min_damage, self.max_damage) * self.count_creatures * 5
-                print(f"{self.name} атакует смертельным лучом {other.name} и наносит {self.attack_power} урона!")
-                other.take_damage(self.attack_power)
-                self.mana -= 25
+                if self.curent_motion < self.curent_day:
+                    self.attack_power = random.randint(self.min_damage, self.max_damage) * self.count_creatures * 5
+                    print(f"{self.name} атакует смертельным лучом {other.name} и наносит {self.attack_power} урона!")
+                    other.take_damage(self.attack_power)
+                    self.curent_motion += 1
+                    self.mana -= 25
+                else:
+                    print('Юнит устал и больше не может ходить')
             else:
                 print('Недостаточно маны')
         else:
@@ -111,10 +141,14 @@ class Attack:
     def mage_attack(self, other):
         if self.health > 0:
             if self.mana > 5:
-                self.attack_power = random.randint(self.min_damage, self.max_damage) * self.count_creatures
-                print(f"{self.name} атакует магией {other.name} и наносит {self.attack_power} урона!")
-                other.take_damage(self.attack_power)
-                self.mana -= 5
+                if self.curent_motion < self.curent_day:
+                    self.attack_power = random.randint(self.min_damage, self.max_damage) * self.count_creatures
+                    print(f"{self.name} атакует магией {other.name} и наносит {self.attack_power} урона!")
+                    other.take_damage(self.attack_power)
+                    self.curent_motion += 1
+                    self.mana -= 5
+                else:
+                    print('Юнит устал и больше не может ходить')
             else:
                 print('Недостаточно маны')
         else:
@@ -124,10 +158,14 @@ class Attack:
     def meteorite_attack(self, other):
         if self.health > 0:
             if self.mana > 25:
-                self.attack_power = random.randint(self.min_damage, self.max_damage) * self.count_creatures * 5
-                print(f"{self.name} атакует метеоритом {other.name} и наносит {self.attack_power} урона!")
-                other.take_damage(self.attack_power)
-                self.mana -= 25
+                if self.curent_motion < self.curent_day:
+                    self.attack_power = random.randint(self.min_damage, self.max_damage) * self.count_creatures * 5
+                    print(f"{self.name} атакует метеоритом {other.name} и наносит {self.attack_power} урона!")
+                    other.take_damage(self.attack_power)
+                    self.curent_motion += 1
+                    self.mana -= 25
+                else:
+                    print('Юнит устал и больше не может ходить')
             else:
                 print('Недостаточно маны')
         else:
@@ -141,6 +179,10 @@ class Attack:
             other.take_damage(self.attack_power)
         else:
             print(" ")
+
+
+    def len1(self):
+        print(self.count_creatures)
 
 
 class Take_damage:
@@ -202,15 +244,17 @@ def game_info():
     pass
 
 
-class Lich(Attack, Take_damage):
+class Lich(Attack, Take_damage, Day_cycle):
     max_damage = 200
     min_damage = 100
     def __init__(self, count_creatures):
+        self.curent_motion = 0
         self.count_creatures = count_creatures
         self.name = 'Лич'
         self.max_hp = 100
         self.health = self.max_hp * self.count_creatures
         self.mana = 100
+        self.curent_day = 1
 
 
     def mage_attack(self, other):
@@ -229,16 +273,25 @@ class Lich(Attack, Take_damage):
         super().create(count = count)
 
 
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
+
+
     def spawn_minion(self):
         if self.health > 0:
-            a = random.randint(1, 2)
-            spawn = random.randint(1, 5)
-            if a == 1:
-                zombie.spawn_new(spawn)
-                print(f'появилось {spawn} зомби')
+            if self.curent_motion < self.curent_day:
+                a = random.randint(1, 2)
+                spawn = random.randint(1, 5)
+                self.curent_motion += 1
+                if a == 1:
+                    zombie.spawn_new(spawn)
+                    print(f'появилось {spawn} зомби')
+                else:
+                    skelet.spawn_new(spawn)
+                    print(f'появилось {spawn} скелетов')
             else:
-                skelet.spawn_new(spawn)
-                print(f'появилось {spawn} скелетов')
+                print('Юнит устал и больше не может использовать способность')
         else:
             print(f"{self.name} не может использовать способность, так как он повержен.")
     
@@ -250,15 +303,17 @@ class Lich(Attack, Take_damage):
     pass
 
 
-class Skelet(Attack, Take_damage):
+class Skelet(Attack, Take_damage, Day_cycle):
     max_damage = 150
     min_damage = 100
     def __init__(self, count_creatures):
+        self.curent_motion = 0
         self.count_creatures = count_creatures
         self.name = 'Скелет'
         self.health = 50 * self.count_creatures
         self.max_hp = 50
         self.arrows = 5
+        self.curent_day = 1
 
 
     def sword_attack(self, other):
@@ -288,6 +343,11 @@ class Skelet(Attack, Take_damage):
 
     def create(self, count):
         super().create(count = count)
+
+
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
     
 
     def info(self):
@@ -296,14 +356,16 @@ class Skelet(Attack, Take_damage):
     pass
 
 
-class Zombie(Attack, Take_damage):
+class Zombie(Attack, Take_damage, Day_cycle):
     max_damage = 75
     min_damage = 50
     def __init__(self, count_creatures):
+        self.curent_motion = 0
         self.count_creatures = count_creatures
         self.name = 'Зомби'
         self.health = 200 * self.count_creatures
         self.max_hp = 200
+        self.curent_day = 1
 
 
     def retaliatory_attack(self, other):
@@ -329,6 +391,11 @@ class Zombie(Attack, Take_damage):
 
     def create(self, count):
         super().create(count = count)
+
+
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
     
 
     def info(self):
@@ -337,14 +404,16 @@ class Zombie(Attack, Take_damage):
     pass
 
 
-class Ghoast(Attack, Take_damage):
+class Ghoast(Attack, Take_damage, Day_cycle):
     max_damage = 150
     min_damage = 75
     def __init__(self, count_creatures):
+        self.curent_motion = 0
         self.count_creatures = count_creatures
         self.name = 'Призрак'
         self.health = 75 * self.count_creatures
         self.max_hp = 75
+        self.curent_day = 1
 
 
     def retaliatory_attack(self, other):
@@ -368,20 +437,27 @@ class Ghoast(Attack, Take_damage):
         super().create(count = count)
 
 
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
+
+
     def info(self):
         print('Призрак может атаковать с помощью функции atack, а также может уклонится от удара с шансом 75%')
         print(f'У призрака сейчас {self.health * self.count_creatures} здоровья, {self.max_damage * self.count_creatures} максимальный урон,{self.min_damage * self.count_creatures} минимальный урон')
     pass
 
 
-class Vampire(Attack, Take_damage):
+class Vampire(Attack, Take_damage, Day_cycle):
     max_damage = 150
     min_damage = 100
     def __init__(self, count_creatures):
+        self.curent_motion = 0
         self.count_creatures = count_creatures
         self.name = 'Вампир'
         self.health = 150 * self.count_creatures
         self.max_hp = 150
+        self.curent_day = 1
     
 
     def bite_attack(self, other):
@@ -404,6 +480,11 @@ class Vampire(Attack, Take_damage):
     def create(self, count):
         super().create(count = count)
 
+    
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
+
 
     def info(self):
         print('Вампир может атковать укусом (bite_attack) после атаки востанавливает 15% здоровья от урона который он нанес')
@@ -411,14 +492,16 @@ class Vampire(Attack, Take_damage):
     pass
 
 
-class Villager(Attack, Take_damage):
+class Villager(Attack, Take_damage, Day_cycle):
     max_damage = 150
     min_damage = 100
     def __init__(self, count_creatures):
+        self.curent_motion = 0
         self.count_creatures = count_creatures
         self.name = 'Крестьянин'
         self.health = 100 * self.count_creatures
         self.max_hp = 100
+        self.curent_day = 1
 
 
     def pitchfork_attack(self, other):
@@ -436,6 +519,11 @@ class Villager(Attack, Take_damage):
 
     def create(self, count):
         super().create(count = count)
+
+
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
     
 
     def info(self):
@@ -444,15 +532,17 @@ class Villager(Attack, Take_damage):
     pass
 
 
-class Archer(Attack, Take_damage):
+class Archer(Attack, Take_damage, Day_cycle):
     max_damage = 200
     min_damage = 100
     def __init__(self, count_creatures):
+        self.curent_motion = 0
         self.count_creatures = count_creatures
         self.name = 'Лучник'
         self.health = 75 * self.count_creatures
         self.max_hp = 75
         self.arrows = 5
+        self.curent_day = 1
 
 
     def sword_attack(self, other):
@@ -480,21 +570,28 @@ class Archer(Attack, Take_damage):
         super().create(count = count)
 
 
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
+
+
     def info(self):
         print('Лучник имеет малое количество здоровья но высокий урон, после атаки луком (bow_attack) не может получить ответный удар, также может атаковать мечом(sword_atack)')
         print(f'У лучника сейчас {self.health * self.count_creatures} здоровья, {self.max_damage * self.count_creatures} максимальный урон,{self.min_damage * self.count_creatures} минимальный урон, {self.arrows} стрел')
     pass
 
 
-class Paladin(Attack, Take_damage):
+class Paladin(Attack, Take_damage, Day_cycle):
     max_damage = 200
     min_damage = 100
     def __init__(self, count_creatures):
+        self.curent_motion = 0
         self.count_creatures = count_creatures
         self.name = 'Паладин'
         self.health = 300 * self.count_creatures
         self.max_hp = 300
         self.procent_of_defence = 0.7
+        self.curent_day = 1
 
 
     def sword_attack(self, other):
@@ -518,20 +615,27 @@ class Paladin(Attack, Take_damage):
         super().create(count = count)
 
 
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
+
+
     def info(self):
         print('Паладин имеет большое количество здоровья и высокий урон, паладин имеет защиту и получает на 30% меньше урона, атакует с помощью функции sword_attack')
         print(f'У паладина сейчас {self.health * self.count_creatures} здоровья, {self.max_damage * self.count_creatures} максимальный урон,{self.min_damage * self.count_creatures} минимальный урон')
     pass
 
 
-class Grifon(Attack, Take_damage):
+class Grifon(Attack, Take_damage, Day_cycle):
     max_damage = 250
     min_damage = 150
     def __init__(self, count_creatures):
+        self.curent_motion = 0
         self.count_creatures = count_creatures
         self.name = 'Грифон'
         self.health = 500 * self.count_creatures
         self.max_hp = 500
+        self.curent_day = 1
 
 
     def attack(self, other):
@@ -553,6 +657,11 @@ class Grifon(Attack, Take_damage):
 
     def create(self, count):
         super().create(count = count)
+
+
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
     
 
     def info(self):
@@ -561,16 +670,18 @@ class Grifon(Attack, Take_damage):
     pass
 
 
-class Mage(Attack, Take_damage):
+class Mage(Attack, Take_damage, Day_cycle):
     max_damage = 150
     min_damage = 100
     def __init__(self, count_creatures):
+        self.curent_motion = 0
         self.count_creatures = count_creatures
         self.name = 'Маг'
         self.health = 100 * count_creatures
         self.max_health = 100 * self.count_creatures
         self.max_hp = 100
         self.mana = 100
+        self.curent_day = 1
 
 
     def mage_attack(self, other):
@@ -593,14 +704,23 @@ class Mage(Attack, Take_damage):
         super().create(count = count)
 
 
+    def __len__(self):
+        super().len1()
+        return self.count_creatures
+
+
     def heal(self):
         if self.health > 0:
-            if self.health < 100 * self.count_creatures:
-                self.health += self.max_health * 0.1
-                if self.health >= 100 * self.count_creatures:
-                        self.health = self.max_health
+            if self.curent_motion < self.curent_day:
+                self.curent_motion += 1
+                if self.health < 100 * self.count_creatures:
+                    self.health += self.max_health * 0.1
+                    if self.health >= 100 * self.count_creatures:
+                            self.health = self.max_health
+                else:
+                    self.health = self.max_health
             else:
-                self.health = self.max_health
+                print('Юнит устал и больше не может использовать способность')
         else:
             print(f"{self.name} не может использовать способность, так как он повержен.")
 
@@ -623,10 +743,12 @@ ghoast = Ghoast(0)
 vampire = Vampire(0)
 
 
-class Player_people:
+class Player_people(Town, Day_cycle):
 
     def __init__(self, gold):
-        self.golda = gold
+        self.gold = gold
+        self.curent_day = 1
+        self.curent_gold_amount = 0
     
 
     def count_of_gold(self):
@@ -636,8 +758,9 @@ class Player_people:
     def create_villager(self, count):
         self.cost = 15
         print('Стоимость юнита одного 15 золота')
-        if self.cost * count <= self.golda:
+        if self.cost * count <= self.gold:
             villager.create(count)
+            self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
@@ -646,8 +769,9 @@ class Player_people:
     def create_archer(self, count):
         self.cost = 50
         print('Стоимость юнита одного 50 золота')
-        if self.cost * count <= self.golda:
+        if self.cost * count <= self.gold:
             archer.create(count)
+            self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
@@ -656,8 +780,9 @@ class Player_people:
     def create_paladin(self, count):
         self.cost = 80
         print('Стоимость юнита одного 80 золота')
-        if self.cost * count <= self.golda:
+        if self.cost * count <= self.gold:
             paladin.create(count)
+            self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
@@ -666,8 +791,9 @@ class Player_people:
     def create_grifon(self, count):
         self.cost = 260
         print('Стоимость юнита одного 260 золота')
-        if self.cost * count <= self.golda:
+        if self.cost * count <= self.gold:
             grifon.create(count)
+            self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
@@ -676,8 +802,9 @@ class Player_people:
     def create_mage(self, count):
         self.cost = 600
         print('Стоимость юнита одного 600 золота')
-        if self.cost * count <= self.golda:
+        if self.cost * count <= self.gold:
             mage.create(count)
+            self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
@@ -690,12 +817,26 @@ class Player_people:
         print(f'{paladin.count_creatures} паладинов')
         print(f'{grifon.count_creatures} грифонов')
         print(f'{mage.count_creatures} магов')
+    
+    def day_cycle(self):
+        gold_mine_for_p1.day_cycle()
+        self.curent_gold_amount += self.production_in_day * self.curent_day
+        villager.day_cycle()
+        archer.day_cycle()
+        paladin.day_cycle()
+        grifon.day_cycle()
+        mage.day_cycle()
+        self.curent_day += 1
+        
 
 
-class Player_necromancers:
+
+class Player_necromancers(Town, Day_cycle):
 
     def __init__(self, gold):
-        self.golda = gold
+        self.gold = gold
+        self.curent_day = 1
+        self.curent_gold_amount = 0
         
 
     def count_of_gold(self):
@@ -705,8 +846,9 @@ class Player_necromancers:
     def create_lich(self, count):
         self.cost = 600
         print('Стоимость юнита одного 600 золота')
-        if self.cost * count <= self.golda:
+        if self.cost * count <= self.gold:
             lich.create(count)
+            self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
@@ -715,8 +857,9 @@ class Player_necromancers:
     def create_skelet(self, count):
         self.cost = 30
         print('Стоимость юнита одного 30 золота')
-        if self.cost * count <= self.golda:
+        if self.cost * count <= self.gold:
             skelet.create(count)
+            self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
@@ -725,8 +868,9 @@ class Player_necromancers:
     def create_zombie(self, count):
         self.cost = 15
         print('Стоимость юнита одного 15 золота')
-        if self.cost * count <= self.golda:
+        if self.cost * count <= self.gold:
             zombie.create(count)
+            self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
@@ -735,8 +879,9 @@ class Player_necromancers:
     def create_ghoast(self, count):
         self.cost = 100
         print('Стоимость юнита одного 100 золота')
-        if self.cost * count <= self.golda:
+        if self.cost * count <= self.gold:
             ghoast.create(count)
+            self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
@@ -745,8 +890,9 @@ class Player_necromancers:
     def create_vampire(self, count):
         self.cost = 250
         print('Стоимость юнита одного 250 золота')
-        if self.cost * count <= self.golda:
+        if self.cost * count <= self.gold:
             vampire.create(count)
+            self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
@@ -760,16 +906,37 @@ class Player_necromancers:
         print(f'{ghoast.count_creatures} призраков')
         print(f'{vampire.count_creatures} вампиров')
         
+    
+    def day_cycle(self):
+        gold_mine_for_p2.day_cycle()
+        self.curent_gold_amount += self.production_in_day * self.curent_day
+        lich.day_cycle()
+        skelet.day_cycle()
+        zombie.day_cycle()
+        ghoast.day_cycle()
+        vampire.day_cycle()
+        self.curent_day += 1
+    
+
+    def check_count_of_gold(self):
+        print(self.gold)
+
+        
 
 
 if __name__ == '__main__':
     p1 = Player_people(10000000000)
-    p1.create_villager(10)
+    p1.create_villager(50)
     p2 = Player_necromancers(10000000000)
     p2.create_lich(5)
+    p2.check_count_of_gold()
     p1.army_info()
     p2.army_info()
     lich.ray_attack(villager)
-    # lich.info()
-    # lich.spawn_minion()
-    # battle_info()
+    p2.create_gold_mine()
+    p2.level_up_gold_mine()
+    p2.check_curent_day()
+    p2.day_cycle()
+    p2.check_curent_day()
+    p2.collect_products_with_gold_mine()
+    p2.check_count_of_gold()
