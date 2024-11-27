@@ -925,9 +925,9 @@ class Player_necromancers(Town, Day_cycle):
 
 
 if __name__ == '__main__':
-    p1 = Player_people(10000000000)
+    p1 = Player_people(100000)
+    p2 = Player_necromancers(100000)
     p1.create_villager(50)
-    p2 = Player_necromancers(10000000000)
     p2.create_lich(5)
     p2.check_count_of_gold()
     p1.army_info()
