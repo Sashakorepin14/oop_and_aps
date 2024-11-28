@@ -68,6 +68,8 @@ gold_mine_for_p2 = Gold_mine()
 class Town(Gold_mine):
     def __init__(self):
         pass
+
+    
     def day_cycle(self):
         super().day_cycle()
 
