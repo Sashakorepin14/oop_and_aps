@@ -61,10 +61,6 @@ class Gold_mine(Day_cycle):
         self.curent_gold_amount += self.production_in_day * self.curent_day
 
 
-gold_mine_for_p1 = Gold_mine()
-gold_mine_for_p2 = Gold_mine()
-
-
 class Town(Gold_mine):
     def __init__(self):
         pass
@@ -176,7 +172,7 @@ class Attack:
 
     def retaliatory_attack(self, other):
         if self.health > 0:
-            self.attack_power = (random.randint(self.min_damage, self.max_damage) * self.count_creatures) * 0.75
+            self.attack_power = int((random.randint(self.min_damage, self.max_damage) * self.count_creatures) * 0.75)
             print(f"{self.name} атакует в ответ {other.name} и наносит {self.attack_power} урона!")
             other.take_damage(self.attack_power)
         else:
@@ -204,7 +200,7 @@ class Take_damage:
 
     def take_damage_with_evasion(self, damage):
         a = random.randint(1, 4)
-        if a == 1:
+        if a == 1 or a == 2:
             self.health -= damage
             if self.health <= 0:
                 self.health = 0
@@ -508,7 +504,6 @@ class Villager(Attack, Take_damage, Day_cycle):
 
     def pitchfork_attack(self, other):
         super().attack(other = other)
-        other.retaliatory_attack(villager)
     
 
     def take_damage(self, damage):
@@ -642,7 +637,7 @@ class Grifon(Attack, Take_damage, Day_cycle):
 
     def attack(self, other):
         super().attack(other = other)
-        other.retaliatory_attack(grifon)
+        
 
 
     def retaliatory_attack(self, other):
@@ -733,24 +728,18 @@ class Mage(Attack, Take_damage, Day_cycle):
     pass
 
 
-villager = Villager(0)
-archer = Archer(0)
-paladin = Paladin(0)
-grifon = Grifon(0)
-mage = Mage(0)
-lich = Lich(0)
-skelet = Skelet(0)
-zombie = Zombie(0)
-ghoast = Ghoast(0)
-vampire = Vampire(0)
-
-
 class Player_people(Town, Day_cycle):
 
     def __init__(self, gold):
         self.gold = gold
         self.curent_day = 1
         self.curent_gold_amount = 0
+        self.villager = Villager(0)
+        self.archer = Archer(0)
+        self.paladin = Paladin(0)
+        self.grifon = Grifon(0)
+        self.mage = Mage(0)
+        self.gold_mine = Gold_mine()
     
 
     def count_of_gold(self):
@@ -761,77 +750,109 @@ class Player_people(Town, Day_cycle):
         self.cost = 15
         print('Стоимость юнита одного 15 золота')
         if self.cost * count <= self.gold:
-            villager.create(count)
+            self.villager.create(count)
             self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
+
+    def villager_attack(self, other):
+        self.villager.pitchfork_attack(other)
+        other.retaliatory_attack(self.villager)
 
 
     def create_archer(self, count):
         self.cost = 50
         print('Стоимость юнита одного 50 золота')
         if self.cost * count <= self.gold:
-            archer.create(count)
+            self.archer.create(count)
             self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
+    
+
+    def archer_sword_attack(self, other):
+        self.archer.sword_attack(other)
+        other.retaliatory_attack(self.archer)
+    
+
+    def archer_bow_attack(self, other):
+        self.archer.bow_attack(other)
 
 
     def create_paladin(self, count):
         self.cost = 80
         print('Стоимость юнита одного 80 золота')
         if self.cost * count <= self.gold:
-            paladin.create(count)
+            self.paladin.create(count)
             self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
+
+
+    def paladin_attack(self, other):
+        self.paladin.sword_attack(other)
+        other.retaliatory_attack(self.paladin)
 
 
     def create_grifon(self, count):
         self.cost = 260
         print('Стоимость юнита одного 260 золота')
         if self.cost * count <= self.gold:
-            grifon.create(count)
+            self.grifon.create(count)
             self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
+
+
+    def grifon_attack(self, other):
+        self.grifon.attack(other)
+        other.retaliatory_attack(self.grifon)
 
 
     def create_mage(self, count):
         self.cost = 600
         print('Стоимость юнита одного 600 золота')
         if self.cost * count <= self.gold:
-            mage.create(count)
+            self.mage.create(count)
             self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
     
 
+    def mag_mage_attack(self, other):
+        self.mage.mage_attack(other)
+        other.retaliatory_attack(self.mage)
+    
+
+    def mag_meteorite_attack(self, other):
+        self.mage.meteorite_attack(other)
+        other.retaliatory_attack(self.mage)
+
+
     def army_info(self):
         print('Армия людей')
-        print(f'{villager.count_creatures} крестьянинов')
-        print(f'{archer.count_creatures} лучников')
-        print(f'{paladin.count_creatures} паладинов')
-        print(f'{grifon.count_creatures} грифонов')
-        print(f'{mage.count_creatures} магов')
+        print(f'{self.villager.count_creatures} крестьянинов')
+        print(f'{self.archer.count_creatures} лучников')
+        print(f'{self.paladin.count_creatures} паладинов')
+        print(f'{self.grifon.count_creatures} грифонов')
+        print(f'{self.mage.count_creatures} магов')
     
+
     def day_cycle(self):
-        gold_mine_for_p1.day_cycle()
+        self.gold_mine.day_cycle()
         self.curent_gold_amount += self.production_in_day * self.curent_day
-        villager.day_cycle()
-        archer.day_cycle()
-        paladin.day_cycle()
-        grifon.day_cycle()
-        mage.day_cycle()
+        self.villager.day_cycle()
+        self.archer.day_cycle()
+        self.paladin.day_cycle()
+        self.grifon.day_cycle()
+        self.mage.day_cycle()
         self.curent_day += 1
-        
-
-
+    
 
 class Player_necromancers(Town, Day_cycle):
 
@@ -839,6 +860,12 @@ class Player_necromancers(Town, Day_cycle):
         self.gold = gold
         self.curent_day = 1
         self.curent_gold_amount = 0
+        self.lich = Lich(0)
+        self.skelet = Skelet(0)
+        self.zombie = Zombie(0)
+        self.ghoast = Ghoast(0)
+        self.vampire = Vampire(0)
+        self.gold_mine = Gold_mine()
         
 
     def count_of_gold(self):
@@ -847,83 +874,115 @@ class Player_necromancers(Town, Day_cycle):
 
     def create_lich(self, count):
         self.cost = 600
-        print('Стоимость юнита одного 600 золота')
+        print('Стоимость юнита одного 600 золота')      
         if self.cost * count <= self.gold:
-            lich.create(count)
+            self.lich.create(count)
             self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
+    
+
+    def lich_mage_attack(self, other):
+        self.lich.mage_attack(other)
+        other.retaliatory_attack(self.lich)
+
+    
+    def lich_ray_attack(self, other):
+        self.lich.ray_attack(other)
+        other.retaliatory_attack(self.lich)
 
 
     def create_skelet(self, count):
         self.cost = 30
         print('Стоимость юнита одного 30 золота')
         if self.cost * count <= self.gold:
-            skelet.create(count)
+            self.skelet.create(count)
             self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
+
+
+    def skelet_bow_attack(self, other):
+        self.skelet.bow_attack(other)
+
+
+    def skelet_sword_attack(self, other):
+        self.skelet.sword_attack(other)
+        other.retaliatory_attack(self.skelet)
 
 
     def create_zombie(self, count):
         self.cost = 15
         print('Стоимость юнита одного 15 золота')
         if self.cost * count <= self.gold:
-            zombie.create(count)
+            self.zombie.create(count)
             self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
+
+
+    def zombie_attack(self, other):
+        self.zombie.sword_attack(other)
+        other.retaliatory_attack(self.zombie)
         
 
     def create_ghoast(self, count):
         self.cost = 100
         print('Стоимость юнита одного 100 золота')
         if self.cost * count <= self.gold:
-            ghoast.create(count)
+            self.ghoast.create(count)
             self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
         
+
+    def ghoast_attack(self, other):
+        self.ghoast.attack(other)
+        other.retaliatory_attack(self.ghoast)
+
 
     def create_vampire(self, count):
         self.cost = 250
         print('Стоимость юнита одного 250 золота')
         if self.cost * count <= self.gold:
-            vampire.create(count)
+            self.vampire.create(count)
             self.gold -= self.cost * count
             print(f'Вы купили {count} юнитов')
         else:
             print('Недостаточно золота')
     
 
+    def vampire_attack(self, other):
+        self.vampire.attack(self.other)
+        other.retaliatory_attack(self.vampire)
+
+
     def army_info(self):
         print('Армия некромантов')
-        print(f'{lich.count_creatures} личей')
-        print(f'{skelet.count_creatures} скелетов')
-        print(f'{zombie.count_creatures} зомби')
-        print(f'{ghoast.count_creatures} призраков')
-        print(f'{vampire.count_creatures} вампиров')
+        print(f'{self.lich.count_creatures} личей')
+        print(f'{self.skelet.count_creatures} скелетов')
+        print(f'{self.zombie.count_creatures} зомби')
+        print(f'{self.ghoast.count_creatures} призраков')
+        print(f'{self.vampire.count_creatures} вампиров')
         
     
     def day_cycle(self):
-        gold_mine_for_p2.day_cycle()
+        self.gold_mine.day_cycle()
         self.curent_gold_amount += self.production_in_day * self.curent_day
-        lich.day_cycle()
-        skelet.day_cycle()
-        zombie.day_cycle()
-        ghoast.day_cycle()
-        vampire.day_cycle()
+        self.lich.day_cycle()
+        self.skelet.day_cycle()
+        self.zombie.day_cycle()
+        self.ghoast.day_cycle()
+        self.vampire.day_cycle()
         self.curent_day += 1
     
 
     def check_count_of_gold(self):
         print(self.gold)
-
-        
 
 
 if __name__ == '__main__':
@@ -931,10 +990,12 @@ if __name__ == '__main__':
     p2 = Player_necromancers(100000)
     p1.create_villager(50)
     p2.create_lich(5)
+    p2.create_ghoast(7)
     p2.check_count_of_gold()
     p1.army_info()
     p2.army_info()
-    lich.ray_attack(villager)
+    p2.lich_ray_attack(p1.villager)
+    p1.villager_attack(p2.ghoast)
     p2.create_gold_mine()
     p2.level_up_gold_mine()
     p2.check_curent_day()
