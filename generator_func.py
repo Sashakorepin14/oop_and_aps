@@ -13,6 +13,7 @@ print(next(gen))
 print(next(gen))
 
 
+
 for i in func_gen(10):
     print(i)
 
