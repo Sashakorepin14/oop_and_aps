@@ -1,22 +1,21 @@
 import sys
-num = int(input())
+num = int(input(f'Введите ваше число '))
 l = [0, 100]
 a = sum(l) // 2
 
-def func(a):
+def guess_number(a):
     if a != num:
-        print(f'Ваше число больше {a}')
-        ans = input()
-        if  ans == 'нет' or ans == 'Нет':
+        ans = input(f'Ваше число больше {a}? \n')
+        if  ans == 'нет' or ans == 'Нет' or ans == 'No' or ans == 'no':
             l[1] = a
-            return func(sum(l) // 2)
+            return guess_number(sum(l) // 2)
         else:
             l[0] = a
-            return func(sum(l) // 2)
-    return a
+            return guess_number(sum(l) // 2)
+    return f'Ваше число {a}'
 
 if num >= 1 and num <= 100:
-    print(func(a))
+    print(guess_number(a))
 else:
     print('Досвидания')
     sys.exit(1)
