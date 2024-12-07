@@ -38,14 +38,14 @@ class Gold_mine(Day_cycle):
                 self.gold -= self.cost
                 self.level = 2
                 self.production_in_day = 40
-                print(f'Вы улучшили золотоносную шахту до второго уровня теперь ее доходность состовляет {self.production_in_day}')
+                print(f'Вы улучшили золотоносную шахту до второго уровня теперь ее доходность состовляет {self.production_in_day} золота')
         elif self.level == 2:
             self.cost = 400
             if self.gold >= self.cost:
                 self.gold -= self.cost
                 self.level = 3
                 self.production_in_day = 60
-                print(f'Вы улучшили золотоносную шахту до третьего уровня теперь ее доходность состовляет {self.production_in_day}')
+                print(f'Вы улучшили золотоносную шахту до третьего уровня теперь ее доходность состовляет {self.production_in_day} золота')
 
     
     def collect_products_with_gold_mine(self):
@@ -59,10 +59,6 @@ class Gold_mine(Day_cycle):
     def day_cycle(self):
         super().day_cycle()
         self.curent_gold_amount += self.production_in_day * self.curent_day
-
-
-gold_mine_for_p1 = Gold_mine()
-gold_mine_for_p2 = Gold_mine()
 
 
 class Town(Gold_mine):
@@ -743,10 +739,11 @@ class Player_people(Town, Day_cycle):
         self.paladin = Paladin(0)
         self.grifon = Grifon(0)
         self.mage = Mage(0)
+        self.gold_mine = Gold_mine()
     
 
     def count_of_gold(self):
-        print(f'У вас сейчас {self.golda} золота')
+        print(f'В вашей казне {self.gold} золота')
 
 
     def create_villager(self, count):
@@ -847,7 +844,7 @@ class Player_people(Town, Day_cycle):
     
 
     def day_cycle(self):
-        gold_mine_for_p1.day_cycle()
+        self.gold_mine.day_cycle()
         self.curent_gold_amount += self.production_in_day * self.curent_day
         self.villager.day_cycle()
         self.archer.day_cycle()
@@ -868,10 +865,7 @@ class Player_necromancers(Town, Day_cycle):
         self.zombie = Zombie(0)
         self.ghoast = Ghoast(0)
         self.vampire = Vampire(0)
-        
-
-    def count_of_gold(self):
-        print(f'У вас сейчас {self.golda} золота')
+        self.gold_mine = Gold_mine()
 
 
     def create_lich(self, count):
@@ -973,7 +967,7 @@ class Player_necromancers(Town, Day_cycle):
         
     
     def day_cycle(self):
-        gold_mine_for_p2.day_cycle()
+        self.gold_mine.day_cycle()
         self.curent_gold_amount += self.production_in_day * self.curent_day
         self.lich.day_cycle()
         self.skelet.day_cycle()
@@ -984,7 +978,7 @@ class Player_necromancers(Town, Day_cycle):
     
 
     def check_count_of_gold(self):
-        print(self.gold)
+        print(f'В вашей казне {self.gold} золота')
 
 
 if __name__ == '__main__':
