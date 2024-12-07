@@ -274,24 +274,6 @@ class Lich(Attack, Take_damage, Day_cycle):
     def __len__(self):
         super().len1()
         return self.count_creatures
-
-
-    def spawn_minion(self):
-        if self.health > 0:
-            if self.curent_motion < self.curent_day:
-                a = random.randint(1, 2)
-                spawn = random.randint(1, 5)
-                self.curent_motion += 1
-                if a == 1:
-                    zombie.spawn_new(spawn)
-                    print(f'появилось {spawn} зомби')
-                else:
-                    skelet.spawn_new(spawn)
-                    print(f'появилось {spawn} скелетов')
-            else:
-                print('Юнит устал и больше не может использовать способность')
-        else:
-            print(f"{self.name} не может использовать способность, так как он повержен.")
     
 
     def info(self):
@@ -316,7 +298,6 @@ class Skelet(Attack, Take_damage, Day_cycle):
 
     def sword_attack(self, other):
         super().attack(other = other)
-        other.retaliatory_attack(skelet)
     
 
     def bow_attack(self, other):
@@ -372,7 +353,6 @@ class Zombie(Attack, Take_damage, Day_cycle):
 
     def sword_attack(self, other):
         super().attack(other = other)
-        other.retaliatory_attack(zombie)
     
 
     def take_damage(self, damage):
@@ -420,7 +400,6 @@ class Ghoast(Attack, Take_damage, Day_cycle):
 
     def attack(self, other):
         super().attack(other = other)
-        other.retaliatory_attack(ghoast)
     
 
     def take_damage(self, damage):
@@ -460,7 +439,6 @@ class Vampire(Attack, Take_damage, Day_cycle):
 
     def bite_attack(self, other):
         super().attack(other = other)
-        other.retaliatory_attack(vampire)
     
 
     def take_damage(self, damage):
@@ -544,7 +522,6 @@ class Archer(Attack, Take_damage, Day_cycle):
 
     def sword_attack(self, other):
         super().attack(other = other)
-        other.retaliatory_attack(archer)
     
 
     def bow_attack(self, other):
@@ -593,8 +570,7 @@ class Paladin(Attack, Take_damage, Day_cycle):
 
     def sword_attack(self, other):
         super().attack(other = other)
-        other.retaliatory_attack(paladin)
-    
+
 
     def retaliatory_attack(self, other):
         super().retaliatory_attack(other = other)
@@ -742,7 +718,7 @@ class Player_people(Town, Day_cycle):
         self.gold_mine = Gold_mine()
     
 
-    def count_of_gold(self):
+    def check_count_of_gold(self):
         print(f'В вашей казне {self.gold} золота')
 
 
@@ -887,6 +863,24 @@ class Player_necromancers(Town, Day_cycle):
     def lich_ray_attack(self, other):
         self.lich.ray_attack(other)
         other.retaliatory_attack(self.lich)
+
+    
+    def lich_spawn_minion(self):
+        if self.health > 0:
+            if self.curent_motion < self.curent_day:
+                a = random.randint(1, 2)
+                spawn = random.randint(1, 5)
+                self.curent_motion += 1
+                if a == 1:
+                    self.zombie.spawn_new(spawn)
+                    print(f'появилось {spawn} зомби')
+                else:
+                    self.skelet.spawn_new(spawn)
+                    print(f'появилось {spawn} скелетов')
+            else:
+                print('Юнит устал и больше не может использовать способность')
+        else:
+            print(f"{self.name} не может использовать способность, так как он повержен.")
 
 
     def create_skelet(self, count):
