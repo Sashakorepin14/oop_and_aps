@@ -732,6 +732,7 @@ class Player_people(Town, Day_cycle):
         else:
             print('Недостаточно золота')
 
+
     def villager_attack(self, other):
         self.villager.pitchfork_attack(other)
         other.retaliatory_attack(self.villager)
@@ -958,8 +959,8 @@ class Player_necromancers(Town, Day_cycle):
         print(f'{self.zombie.count_creatures} зомби')
         print(f'{self.ghoast.count_creatures} призраков')
         print(f'{self.vampire.count_creatures} вампиров')
-        
-    
+
+
     def day_cycle(self):
         self.gold_mine.day_cycle()
         self.curent_gold_amount += self.production_in_day * self.curent_day
