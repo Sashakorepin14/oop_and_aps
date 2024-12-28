@@ -707,15 +707,20 @@ class Mage(Attack, Take_damage, Day_cycle):
 class Player_people(Town, Day_cycle):
 
     def __init__(self, gold):
-        self.gold = gold
-        self.curent_day = 1
-        self.curent_gold_amount = 0
-        self.villager = Villager(0)
-        self.archer = Archer(0)
-        self.paladin = Paladin(0)
-        self.grifon = Grifon(0)
-        self.mage = Mage(0)
-        self.gold_mine = Gold_mine()
+        try:
+            if gold < 0:
+                raise ValueError
+            self.gold = gold
+            self.curent_day = 1
+            self.curent_gold_amount = 0
+            self.villager = Villager(0)
+            self.archer = Archer(0)
+            self.paladin = Paladin(0)
+            self.grifon = Grifon(0)
+            self.mage = Mage(0)
+            self.gold_mine = Gold_mine()
+        except:
+            return 'Количество начального золота не может быть менбше 0'
     
 
     def check_count_of_gold(self):
@@ -726,14 +731,17 @@ class Player_people(Town, Day_cycle):
         self.cost = 15
         print('Стоимость юнита одного 15 золота')
         try:
-            if count < 0:
-                raise
-        if self.cost * count <= self.gold:
-            self.villager.create(count)
-            self.gold -= self.cost * count
-            print(f'Вы купили {count} юнитов')
-        else:
-            print('Недостаточно золота')
+            if count < 0 or isinstance(count, int) == False:
+                raise ValueError
+            if self.cost * count <= self.gold:
+                self.villager.create(count)
+                self.gold -= self.cost * count
+                print(f'Вы купили {count} юнитов')
+            else:
+                print('Недостаточно золота')
+        except:
+            print('Количество юнитов не может быть меньше 0 или нецелым числом')
+            return 'Количество юнитов не может быть меньше 0 или нецелым числом'
 
 
     def villager_attack(self, other):
@@ -744,12 +752,18 @@ class Player_people(Town, Day_cycle):
     def create_archer(self, count):
         self.cost = 50
         print('Стоимость юнита одного 50 золота')
-        if self.cost * count <= self.gold:
-            self.archer.create(count)
-            self.gold -= self.cost * count
-            print(f'Вы купили {count} юнитов')
-        else:
-            print('Недостаточно золота')
+        try:
+            if count < 0:
+                raise ValueError
+            if self.cost * count <= self.gold:
+                self.villager.create(count)
+                self.gold -= self.cost * count
+                print(f'Вы купили {count} юнитов')
+            else:
+                print('Недостаточно золота')
+        except:
+            print('Количество юнитов не может быть меньше 0 или нецелым числом')
+            return 'Количество юнитов не может быть меньше 0 или нецелым числом'
     
 
     def archer_sword_attack(self, other):
@@ -764,12 +778,18 @@ class Player_people(Town, Day_cycle):
     def create_paladin(self, count):
         self.cost = 80
         print('Стоимость юнита одного 80 золота')
-        if self.cost * count <= self.gold:
-            self.paladin.create(count)
-            self.gold -= self.cost * count
-            print(f'Вы купили {count} юнитов')
-        else:
-            print('Недостаточно золота')
+        try:
+            if count < 0:
+                raise ValueError
+            if self.cost * count <= self.gold:
+                self.villager.create(count)
+                self.gold -= self.cost * count
+                print(f'Вы купили {count} юнитов')
+            else:
+                print('Недостаточно золота')
+        except:
+            print('Количество юнитов не может быть меньше 0 или нецелым числом')
+            return 'Количество юнитов не может быть меньше 0 или нецелым числом'
 
 
     def paladin_attack(self, other):
@@ -780,12 +800,18 @@ class Player_people(Town, Day_cycle):
     def create_grifon(self, count):
         self.cost = 260
         print('Стоимость юнита одного 260 золота')
-        if self.cost * count <= self.gold:
-            self.grifon.create(count)
-            self.gold -= self.cost * count
-            print(f'Вы купили {count} юнитов')
-        else:
-            print('Недостаточно золота')
+        try:
+            if count < 0:
+                raise ValueError
+            if self.cost * count <= self.gold:
+                self.villager.create(count)
+                self.gold -= self.cost * count
+                print(f'Вы купили {count} юнитов')
+            else:
+                print('Недостаточно золота')
+        except:
+            print('Количество юнитов не может быть меньше 0 или нецелым числом')
+            return 'Количество юнитов не может быть меньше 0 или нецелым числом'
 
 
     def grifon_attack(self, other):
@@ -796,12 +822,18 @@ class Player_people(Town, Day_cycle):
     def create_mage(self, count):
         self.cost = 600
         print('Стоимость юнита одного 600 золота')
-        if self.cost * count <= self.gold:
-            self.mage.create(count)
-            self.gold -= self.cost * count
-            print(f'Вы купили {count} юнитов')
-        else:
-            print('Недостаточно золота')
+        try:
+            if count < 0:
+                raise ValueError
+            if self.cost * count <= self.gold:
+                self.villager.create(count)
+                self.gold -= self.cost * count
+                print(f'Вы купили {count} юнитов')
+            else:
+                print('Недостаточно золота')
+        except:
+            print('Количество юнитов не может быть меньше 0 или нецелым числом')
+            return 'Количество юнитов не может быть меньше 0 или нецелым числом'
     
 
     def mag_mage_attack(self, other):
@@ -837,26 +869,37 @@ class Player_people(Town, Day_cycle):
 class Player_necromancers(Town, Day_cycle):
 
     def __init__(self, gold):
-        self.gold = gold
-        self.curent_day = 1
-        self.curent_gold_amount = 0
-        self.lich = Lich(0)
-        self.skelet = Skelet(0)
-        self.zombie = Zombie(0)
-        self.ghoast = Ghoast(0)
-        self.vampire = Vampire(0)
-        self.gold_mine = Gold_mine()
+        try:
+            if gold < 0:
+                raise ValueError
+            self.gold = gold
+            self.curent_day = 1
+            self.curent_gold_amount = 0
+            self.lich = Lich(0)
+            self.skelet = Skelet(0)
+            self.zombie = Zombie(0)
+            self.ghoast = Ghoast(0)
+            self.vampire = Vampire(0)
+            self.gold_mine = Gold_mine()
+        except:
+            return 'Количество начального золота не может быть менбше 0'
 
 
     def create_lich(self, count):
         self.cost = 600
         print('Стоимость юнита одного 600 золота')      
-        if self.cost * count <= self.gold:
-            self.lich.create(count)
-            self.gold -= self.cost * count
-            print(f'Вы купили {count} юнитов')
-        else:
-            print('Недостаточно золота')
+        try:
+            if count < 0:
+                raise ValueError
+            if self.cost * count <= self.gold:
+                self.villager.create(count)
+                self.gold -= self.cost * count
+                print(f'Вы купили {count} юнитов')
+            else:
+                print('Недостаточно золота')
+        except  ValueError:
+            print('Количество юнитов не может быть меньше 0 или нецелым числом')
+            return 'Количество юнитов не может быть меньше 0 или нецелым числом'
     
 
     def lich_mage_attack(self, other):
@@ -890,12 +933,18 @@ class Player_necromancers(Town, Day_cycle):
     def create_skelet(self, count):
         self.cost = 30
         print('Стоимость юнита одного 30 золота')
-        if self.cost * count <= self.gold:
-            self.skelet.create(count)
-            self.gold -= self.cost * count
-            print(f'Вы купили {count} юнитов')
-        else:
-            print('Недостаточно золота')
+        try:
+            if count < 0:
+                raise ValueError
+            if self.cost * count <= self.gold:
+                self.villager.create(count)
+                self.gold -= self.cost * count
+                print(f'Вы купили {count} юнитов')
+            else:
+                print('Недостаточно золота')
+        except:
+            print('Количество юнитов не может быть меньше 0 или нецелым числом')
+            return 'Количество юнитов не может быть меньше 0 или нецелым числом'
 
 
     def skelet_bow_attack(self, other):
@@ -910,12 +959,18 @@ class Player_necromancers(Town, Day_cycle):
     def create_zombie(self, count):
         self.cost = 15
         print('Стоимость юнита одного 15 золота')
-        if self.cost * count <= self.gold:
-            self.zombie.create(count)
-            self.gold -= self.cost * count
-            print(f'Вы купили {count} юнитов')
-        else:
-            print('Недостаточно золота')
+        try:
+            if count < 0:
+                raise ValueError
+            if self.cost * count <= self.gold:
+                self.villager.create(count)
+                self.gold -= self.cost * count
+                print(f'Вы купили {count} юнитов')
+            else:
+                print('Недостаточно золота')
+        except:
+            print('Количество юнитов не может быть меньше 0 или нецелым числом')
+            return 'Количество юнитов не может быть меньше 0 или нецелым числом'
 
 
     def zombie_attack(self, other):
@@ -926,12 +981,18 @@ class Player_necromancers(Town, Day_cycle):
     def create_ghoast(self, count):
         self.cost = 100
         print('Стоимость юнита одного 100 золота')
-        if self.cost * count <= self.gold:
-            self.ghoast.create(count)
-            self.gold -= self.cost * count
-            print(f'Вы купили {count} юнитов')
-        else:
-            print('Недостаточно золота')
+        try:
+            if count < 0:
+                raise ValueError
+            if self.cost * count <= self.gold:
+                self.villager.create(count)
+                self.gold -= self.cost * count
+                print(f'Вы купили {count} юнитов')
+            else:
+                print('Недостаточно золота')
+        except:
+            print('Количество юнитов не может быть меньше 0 или нецелым числом')
+            return 'Количество юнитов не может быть меньше 0 или нецелым числом'
         
 
     def ghoast_attack(self, other):
@@ -942,12 +1003,18 @@ class Player_necromancers(Town, Day_cycle):
     def create_vampire(self, count):
         self.cost = 250
         print('Стоимость юнита одного 250 золота')
-        if self.cost * count <= self.gold:
-            self.vampire.create(count)
-            self.gold -= self.cost * count
-            print(f'Вы купили {count} юнитов')
-        else:
-            print('Недостаточно золота')
+        try:
+            if count < 0:
+                raise ValueError
+            if self.cost * count <= self.gold:
+                self.villager.create(count)
+                self.gold -= self.cost * count
+                print(f'Вы купили {count} юнитов')
+            else:
+                print('Недостаточно золота')
+        except:
+            print('Количество юнитов не может быть меньше 0 или нецелым числом')
+            return 'Количество юнитов не может быть меньше 0 или нецелым числом'
     
 
     def vampire_attack(self, other):
@@ -973,7 +1040,7 @@ class Player_necromancers(Town, Day_cycle):
         self.ghoast.day_cycle()
         self.vampire.day_cycle()
         self.curent_day += 1
-    
+
 
     def check_count_of_gold(self):
         print(f'В вашей казне {self.gold} золота')
