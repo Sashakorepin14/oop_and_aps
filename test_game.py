@@ -725,6 +725,9 @@ class Player_people(Town, Day_cycle):
     def create_villager(self, count):
         self.cost = 15
         print('Стоимость юнита одного 15 золота')
+        try:
+            if count < 0:
+                raise
         if self.cost * count <= self.gold:
             self.villager.create(count)
             self.gold -= self.cost * count
